@@ -179,6 +179,25 @@ async function listMarkdownFiles(root: string): Promise<string[]> {
   return results;
 }
 
+const skippedDirectoryNames = new Set([
+  "node_modules",
+  ".git",
+  "DerivedData",
+  "SourcePackages",
+  "vendor",
+  "dist",
+  "build",
+  ".next",
+  "checkouts",
+]);
+
+export function shouldSkipDirectory(name: string): boolean {
+  if (skippedDirectoryNames.has(name)) {
+    return true;
+  }
+  return name.startsWith(".derivedData");
+}
+
 async function walk(directory: string, results: string[]): Promise<void> {
   const entries = await readdir(directory, { withFileTypes: true });
 
@@ -187,7 +206,7 @@ async function walk(directory: string, results: string[]): Promise<void> {
       const entryPath = path.join(directory, entry.name);
 
       if (entry.isDirectory()) {
-        if (entry.name === "node_modules" || entry.name === ".git") {
+        if (shouldSkipDirectory(entry.name)) {
           return;
         }
         await walk(entryPath, results);

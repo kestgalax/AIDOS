@@ -60,6 +60,7 @@ CONTROL
 - `plan/aidos-turnkey-implementation.md` — практический план реализации AIDOS как продукта "под ключ".
 - `examples/generated-project/` — пример проекта, созданный через `aidos init`.
 - `examples/dashboard-starter/` — опциональный read-only dashboard scaffold для consumer projects.
+- Живой consumer: [CarrotType](https://github.com/kestgalax/carrottype) (private / invite-only) — реальный macOS-продукт на AIDOS; клон как sibling `../carrottype`. См. `docs/living-consumers.ru.md`.
 
 ## С чего начать
 
@@ -77,6 +78,8 @@ AI-агентам следует начать с `AGENTS.md` и следоват
 Чтобы применить AIDOS к новому проекту, используйте `docs/quickstart-new-project.ru.md`.
 
 Чтобы посмотреть созданный пример, откройте `examples/generated-project/`.
+
+Для живого consumer (private) см. `docs/living-consumers.ru.md` и sibling `../carrottype`, если есть доступ.
 
 ## Локальный CLI
 

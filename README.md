@@ -60,6 +60,7 @@ Each layer narrows the next one:
 - `plan/aidos-turnkey-implementation.md` — practical plan for implementing AIDOS as a turnkey product.
 - `examples/generated-project/` — example project produced by `aidos init`.
 - `examples/dashboard-starter/` — optional read-only dashboard scaffold for consumer projects.
+- Living consumer: [CarrotType](https://github.com/kestgalax/carrottype) (private / invite-only) — real macOS product using AIDOS; clone as sibling `../carrottype`. See `docs/living-consumers.md`.
 
 ## How To Start
 
@@ -77,6 +78,8 @@ AI agents should start with `AGENTS.md` and follow its required reading order be
 To apply AIDOS to a new project, follow `docs/quickstart-new-project.md`.
 
 For a generated example, inspect `examples/generated-project/`.
+
+For a living consumer (private), see `docs/living-consumers.md` and sibling `../carrottype` when you have access.
 
 ## Local CLI
 

@@ -122,6 +122,8 @@ AIDOS bootstraps consumer projects through:
 - linked artifact generation through `aidos new flow`;
 - optional dashboard scaffold through `aidos new dashboard`.
 
+In-repo scaffolds under `examples/` are not the same as a living product. External living consumers (first: CarrotType) are documented in `docs/living-consumers.md` and prove AIDOS on real stacks outside this repository.
+
 ## Source Of Truth Rule
 
 Executable tooling may help create, validate, or visualize AIDOS artifacts. It must not become the only place where project knowledge exists. Repository files remain the durable source of truth.

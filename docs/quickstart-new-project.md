@@ -135,6 +135,20 @@ npm run aidos:review
 
 `examples/generated-project/` shows a generated skeleton.
 
+## Living Consumer
+
+In-repo examples are scaffolds. A **living consumer** is an external product that runs AIDOS in production development.
+
+The first documented living consumer is [CarrotType](https://github.com/kestgalax/carrottype) (private / invite-only macOS dictation app). Recommended workspace layout:
+
+```text
+workspace/
+  AIDOS/
+  carrottype/
+```
+
+Inspect its intent, ADRs, roadmap, and `aidos.config.json`. Full notes: `docs/living-consumers.md`.
+
 ## Current Limitations
 
 - AIDOS is used from a cloned repository, not as a published npm package.

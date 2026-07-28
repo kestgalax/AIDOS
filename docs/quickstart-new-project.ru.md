@@ -129,6 +129,20 @@ npm run aidos:review
 
 `examples/generated-project/` показывает сгенерированный skeleton.
 
+## Живой consumer
+
+Примеры в `examples/` — это scaffolds. **Живой consumer** — внешний продукт, который ведёт разработку через AIDOS.
+
+Первый задокументированный живой consumer — [CarrotType](https://github.com/kestgalax/carrottype) (private / invite-only macOS-приложение для диктовки). Рекомендуемый layout:
+
+```text
+workspace/
+  AIDOS/
+  carrottype/
+```
+
+Смотрите intent, ADR, roadmap и `aidos.config.json`. Подробности: `docs/living-consumers.ru.md`.
+
 ## Текущие ограничения
 
 - AIDOS используется из клонированного репозитория, а не как опубликованный npm-пакет.

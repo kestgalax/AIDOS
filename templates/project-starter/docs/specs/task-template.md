@@ -26,4 +26,9 @@
 
 ## ADR Impact
 
-No ADR impact
+State one:
+
+- No ADR impact
+- New ADR required
+- Existing ADR must be superseded or amended
+- Follows accepted ADR-NNN…

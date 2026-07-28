@@ -56,11 +56,21 @@ AIDOS считается реализованным "под ключ", когд�
 
 Текущий фокус:
 
-- применять clone-template bootstrap к новым проектам;
-- укреплять generators, traceability autofill и lifecycle onboarding;
-- сохранить markdown-файлы в репозитории как source of truth.
+- продолжить Milestone 8 / Фазу 9 после первого slice (validate ignore + ADR Impact + living-consumer docs);
+- следующий пункт: gate на заполненный review Outcome/Evidence;
+- сохранить markdown-файлы в репозитории как source of truth;
+- не расширять dashboard/write-back без ADR.
 
-Ближайшая очередь: richer review automation и platform-specific CI templates при появлении roadmap item.
+Ближайшая очередь (из `docs/roadmap.md` Milestone 8):
+
+1. ~~ignore-policy для `aidos validate` (DerivedData / SPM / vendor);~~ **Done**
+2. ~~контракт `ADR Impact` в `aidos review` + шаблоны;~~ **Done** (+ living consumer docs для CarrotType)
+3. gate на заполненный review Outcome/Evidence;
+4. semantic freshness ссылок feature↔ADR;
+5. дисциплина новых flows после MVP;
+6. шаблоны research/spike/quality-gate;
+7. stack-aware hooks в consumer `ops/`;
+8. post-MVP consumer playbook.
 
 ## Фаза 1. Принять ADR по форме продукта и стеку
 
@@ -384,6 +394,40 @@ UI добавляется только после CLI/core.
 - CLI остаётся пригодным для автоматизации и CI;
 - repository artifacts остаются главным источником истины.
 
+## Фаза 9. Consumer Hardening (уроки CarrotType)
+
+Статус: в процессе (первый slice выполнен). Соответствует `docs/roadmap.md` Milestone 8.
+
+Контекст:
+
+- CarrotType показал, что knowledge/ADR слой AIDOS достаточен для ведения native macOS MVP до private release.
+- CarrotType задокументирован как living consumer в `docs/living-consumers.md` (sibling `../carrottype`, private GitHub).
+- Слабое место — CONTROL tooling на «грязном» consumer-репозитории: false positives в `validate`, хрупкий `ADR Impact` в `review`, пустой review artifact, один раздутый feature-flow, зелёный `trace` при устаревших ADR-ссылках.
+
+Задачи фазы (порядок = приоритет):
+
+1. **Validate ignore policy** — **Done.** Не сканировать `.derivedData*`, SPM checkouts, `node_modules` и аналогичный vendor markdown.
+2. **ADR Impact UX** — **Done.** Допустимы формулировки `Follows accepted ADR…`; шаблоны синхронизированы.
+3. **Review closure** — пустые Outcome/Evidence в review-спеках = blocker до Done.
+4. **Semantic freshness** — ловить stale Related ADRs и accepted ADR без связи с текущей architecture.
+5. **Multi-flow hygiene** — правило/док: новый engine, UX surface или trust model → новый `aidos new flow` (или amendment), а не бесконечное расширение F-001.
+6. **Research / spike / quality-gate** — first-class шаблоны по образцу CarrotType research notes и quality notes.
+7. **Stack-aware ops** — примеры consumer CI/docs для non-Node runtime без требования Node как runtime продукта.
+8. **Post-MVP playbook** — quality gate → flip recommended → signing/notarization → spike backlog; ссылка из quickstart/lifecycle.
+
+Результат фазы:
+
+- native consumer с build artifacts проходит `aidos validate` без ложных broken links;
+- `aidos review` не блокирует семантически валидный ADR Impact;
+- незакрытый review artifact виден как blocker;
+- post-MVP workflow и spike-артефакты описаны и пригодны для следующего consumer-проекта.
+
+Не делать в этой фазе:
+
+- write-back dashboard / persistence / hosted deploy;
+- замена markdown source of truth;
+- обязательный полный native CI build как hard gate AIDOS.
+
 ## Definition of Ready для публичного использования
 
 AIDOS готов к использованию другими проектами, когда:
@@ -433,5 +477,7 @@ AIDOS готов к использованию другими проектами
 1. ~~Довести dashboard composition до более полного shadcn/ui набора.~~ Выполнено.
 2. ~~Решить ADR на write-back, persistence, deployment.~~ Выполнено: `ADR-004`.
 3. ~~Turnkey bootstrap нового проекта.~~ Выполнено: `templates/project-starter/`, lifecycle docs, `aidos new flow`, CI scripts, optional dashboard scaffold.
+4. ~~Фаза 9 / Milestone 8 — первый slice~~ Выполнено: validate ignore, ADR Impact `Follows accepted`, `docs/living-consumers.md`.
+5. **Фаза 9 / Milestone 8 — далее:** review Outcome/Evidence closure, затем semantic freshness и остальная очередь.
 
-Следующие шаги: richer review automation и platform-specific CI templates через roadmap item.
+Следующий executable шаг: gate на заполненный review Outcome/Evidence в `aidos review`.

@@ -71,6 +71,34 @@ test("broken markdown links are reported", async () => {
   }
 });
 
+test("markdown under .derivedData is ignored for link checks", async () => {
+  const fixture = await createValidProject();
+
+  try {
+    await mkdir(path.join(fixture, ".derivedData", "SourcePackages", "checkouts", "dep"), {
+      recursive: true,
+    });
+    await writeFile(
+      path.join(fixture, ".derivedData", "SourcePackages", "checkouts", "dep", "README.md"),
+      "# Vendor\n\n[Broken](does-not-exist.md)\n",
+      "utf8",
+    );
+    await mkdir(path.join(fixture, ".derivedData-release"), { recursive: true });
+    await writeFile(
+      path.join(fixture, ".derivedData-release", "NOTES.md"),
+      "# Release vendor\n\n[Broken](also-missing.md)\n",
+      "utf8",
+    );
+
+    const result = await validateProject(fixture);
+
+    assert.equal(result.ok, true);
+    assert.deepEqual(result.errors, []);
+  } finally {
+    await rm(fixture, { recursive: true, force: true });
+  }
+});
+
 async function createValidProject(): Promise<string> {
   const root = await mkdtemp(path.join(tmpdir(), "aidos-"));
   await mkdir(path.join(root, ".ai"), { recursive: true });

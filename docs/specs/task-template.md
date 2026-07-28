@@ -76,6 +76,7 @@ State one:
 - No ADR impact.
 - New ADR required before implementation.
 - Existing ADR must be superseded or amended.
+- Follows accepted ADR-NNN… (when implementation stays within already accepted ADRs).
 
 ## Completion Report
 

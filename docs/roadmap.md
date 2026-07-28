@@ -28,13 +28,26 @@ Completed for the first CLI/core increment:
 
 Current focus:
 
-- Strengthen file-based workflows, CLI/core quality, and read-only dashboard clarity within the boundaries set by `ADR-004`.
+- Continue Milestone 8 Consumer Hardening after the first slice (validate ignore + ADR Impact + living-consumer docs).
 - Keep markdown repository artifacts as the source of truth.
 - Keep this roadmap and the turnkey implementation plan current after each task.
 
-Immediate remaining queue:
+Immediate remaining queue (Milestone 8 — Consumer Hardening):
 
-- None for the current MVP increment. New work requires a roadmap item, feature spec, or superseding ADR.
+1. ~~`aidos validate` ignore policy for build/vendor trees~~ **Done**
+2. ~~Softer / clearer `ADR Impact` contract in `aidos review`~~ **Done**
+3. Require filled review Outcome + Evidence before a flow is treated as Done.
+4. Semantic link freshness in `trace`/`review` (stale feature↔ADR refs; accepted ADRs unreferenced by current architecture).
+5. Multi-flow discipline after first MVP slice (new engine / UX surface / trust model → new `aidos new flow` or amended feature).
+6. First-class research/spike + quality-gate artifact types (templates + promote-to-ADR path).
+7. Stack-aware verification hooks in consumer `ops/` (document optional native build commands without forcing Node as product runtime).
+8. Post-MVP consumer playbook (quality gate → recommended flip → notarization/signing → spike backlog).
+
+Completed this slice:
+
+- Validate directory ignore (`shouldSkipDirectory` in `src/validate.ts`).
+- ADR Impact accepts `Follows accepted ADR…` (`src/review.ts` + task templates).
+- CarrotType documented as living consumer in `docs/living-consumers.md` (and `.ru.md`).
 
 ## Milestone 0: Knowledge Core
 
@@ -257,3 +270,40 @@ Next focus:
 
 - Apply clone-template bootstrap to new projects.
 - Add new capabilities only through roadmap items, feature specs, or superseding ADRs.
+
+## Milestone 8: Consumer Hardening (CarrotType lessons)
+
+Status: In progress (first slice complete).
+
+Goal: make AIDOS CONTROL and post-MVP workflow reliable on dirty real-world consumer repos, not only clean skeletons.
+
+Evidence source:
+
+- Consumer project CarrotType reached private `v0.1.0` with strong knowledge/ADR discipline.
+- Documented as living consumer in `docs/living-consumers.md` (sibling `../carrottype`, private GitHub).
+- Gaps observed: `aidos validate` failed on SPM/DerivedData markdown links; `aidos review` blocked on human-written ADR Impact; review artifact left empty; one feature absorbed multiple engines; `trace` stayed green despite stale ADR refs.
+
+Deliverables (ordered):
+
+1. **Validate ignore policy** — **Done.** Skip generated/vendor trees (`.derivedData*`, `SourcePackages`, `checkouts`, `node_modules`, …) in `src/validate.ts`.
+2. **Review ADR Impact UX** — **Done.** Accept `Follows accepted ADR…` plus existing outcomes; task templates updated.
+3. **Review closure gate** — empty Outcome/Evidence in review specs cannot count as complete.
+4. **Semantic freshness checks** — detect stale Related ADRs and accepted ADRs missing from current architecture links.
+5. **Post-MVP flow hygiene** — document and optionally enforce opening a new flow when scope expands beyond the first vertical slice.
+6. **Spike / research / quality-gate templates** — promote CarrotType-style research notes into first-class AIDOS artifacts.
+7. **Stack-aware ops hooks** — consumer CI/docs patterns for non-Node runtimes (e.g. Xcode) while governance remains markdown-first.
+8. **Post-MVP consumer playbook** — guide for quality notes, distribution trust, and research backlog after first release.
+
+Exit criteria:
+
+- A native consumer project with DerivedData/SPM checkouts can pass `aidos validate` without false positives from vendor docs.
+- `aidos review` accepts semantically valid ADR Impact wording used in real tasks, or generators emit the required phrases.
+- Incomplete review artifacts are reported as blockers.
+- Roadmap/docs describe how to split post-MVP work into new flows and research spikes.
+- Post-MVP consumer playbook exists and is linked from quickstart or lifecycle docs.
+
+Non-goals for this milestone:
+
+- Write-back dashboard, persistence, or hosted deployment (still gated by `ADR-004` / future ADRs).
+- Replacing markdown as source of truth.
+- Full automated Xcode/CI build as a hard AIDOS requirement.

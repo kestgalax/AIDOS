@@ -88,12 +88,19 @@ async function reviewTaskFile(root: string, filePath: string, findings: ReviewFi
   }
 
   const adrImpact = readSection(contents, "ADR Impact");
-  if (!adrImpact || !/No ADR impact|New ADR required|Existing ADR must be superseded or amended/i.test(adrImpact)) {
+  if (!adrImpact || !hasAllowedAdrImpact(adrImpact)) {
     findings.blocking.push({
       file,
       message: "ADR Impact is missing or does not use an allowed outcome",
     });
   }
+}
+
+/** Allowed ADR Impact outcomes for deterministic review. */
+export function hasAllowedAdrImpact(section: string): boolean {
+  return /No ADR impact|New ADR required|Existing ADR must be superseded or amended|Follows\s+accepted\s+`?ADR/i.test(
+    section,
+  );
 }
 
 async function reviewFeatureFile(root: string, filePath: string, findings: ReviewFindings): Promise<void> {

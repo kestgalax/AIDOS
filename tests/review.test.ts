@@ -105,6 +105,52 @@ test("review approves task artifacts with concrete criteria and verification evi
   }
 });
 
+test("review accepts Follows accepted ADR wording for ADR Impact", async () => {
+  const fixture = await createReviewFixture({
+    taskContents: [
+      "# Follows ADR Task",
+      "",
+      "## Traceability",
+      "",
+      "- Product Intent Link: docs/product-intent.md",
+      "- Roadmap Item: Milestone 8",
+      "- Feature Spec: docs/specs/features/reviewer-automation.md",
+      "- Related ADRs: docs/decisions/ADR-001-test.md",
+      "",
+      "## Acceptance Criteria",
+      "",
+      "- Task ADR Impact may say Follows Accepted ADR-002.",
+      "",
+      "## Verification",
+      "",
+      "Commands or checks to run:",
+      "",
+      "- npm test",
+      "",
+      "Expected evidence:",
+      "",
+      "- Review outcome Approve for Follows accepted ADR wording.",
+      "",
+      "## Documentation Updates",
+      "",
+      "- Update task template ADR Impact allowed outcomes.",
+      "",
+      "## ADR Impact",
+      "",
+      "Follows Accepted `ADR-002`, `ADR-003`, and `ADR-004` for the catalog path.",
+    ].join("\n"),
+  });
+
+  try {
+    const report = await reviewProject(fixture);
+
+    assert.equal(report.outcome, "Approve");
+    assert.deepEqual(report.findings.blocking, []);
+  } finally {
+    await rm(fixture, { recursive: true, force: true });
+  }
+});
+
 async function createReviewFixture(options: { taskContents: string }): Promise<string> {
   const root = await mkdtemp(path.join(tmpdir(), "aidos-review-"));
   await mkdir(path.join(root, "docs", "decisions"), { recursive: true });
