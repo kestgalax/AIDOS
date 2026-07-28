@@ -33,6 +33,7 @@ yarn-error.log*
 .DS_Store
 *.pem
 .vercel
+.cursor/
 
 # Next.js (dashboard starter)
 next-env.d.ts
