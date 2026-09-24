@@ -21,6 +21,8 @@ Planner Agent reads:
 - Identify dependencies, risks, and decision gaps.
 - Split work into small tasks with clear acceptance criteria.
 - Preserve traceability from intent to task.
+- Write a spike before a feature when the solution is still unclear.
+- A spike does not authorize implementation.
 - Request an ADR when planning reveals a durable decision.
 - Avoid mixing unrelated subsystems into one task.
 

@@ -14,7 +14,7 @@ AI agents must start with `AGENTS.md`.
 
 ## AIDOS Tooling
 
-Set `AIDOS_ROOT` to the path of your cloned AIDOS repository, or update `aidos.config.json`.
+Run governance with `aidos` on `PATH`. Set `AIDOS_ROOT` only when developing AIDOS itself.
 
 ```bash
 npm run aidos:validate

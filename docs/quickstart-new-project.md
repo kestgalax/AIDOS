@@ -53,11 +53,13 @@ Non-interactive mode:
 npm exec aidos -- init ../my-new-project
 ```
 
-Update an existing skeleton:
+Update an existing project only when it should receive new templates and roles:
 
 ```bash
 npm exec aidos -- init ../my-new-project --update --confirm-overwrite
 ```
+
+Update refreshes `.ai/`, spec templates, and `scripts/run-aidos.mjs`. It creates missing starter files. It leaves product intent, architecture, roadmap, ADRs, README, `AGENTS.md`, `ops/`, and filled specs in place. A project that is already underway does not need this command until it wants the new behavior workflow.
 
 ## 3. Follow The Project Lifecycle
 
@@ -94,7 +96,7 @@ AIDOS validation passed
 From the new project directory:
 
 ```bash
-npm exec --prefix ../AIDOS aidos -- new flow "first user workflow"
+aidos new flow "first user workflow"
 ```
 
 This creates linked feature, task, and review artifacts with traceability autofill.
@@ -114,7 +116,7 @@ npm run aidos:review
 ## 6. Optional Dashboard Scaffold
 
 ```bash
-npm exec --prefix ../AIDOS aidos -- new dashboard ./dashboard
+aidos new dashboard ./dashboard
 ```
 
 The dashboard starter lives in `examples/dashboard-starter/` inside the AIDOS clone.

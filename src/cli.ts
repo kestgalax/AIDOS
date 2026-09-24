@@ -51,8 +51,24 @@ if (command === "validate") {
   const result = await reviewProject(process.cwd());
   console.log(result.text);
   process.exitCode = result.outcome === "Approve" ? 0 : 1;
+} else if (command === "archive") {
+  const { archiveFeature } = await import("./archive.js");
+  const slug = process.argv[3] ?? "";
+  if (slug === "") {
+    console.error("Usage: aidos archive <feature-slug>");
+    process.exitCode = 1;
+  } else {
+    try {
+      const result = await archiveFeature(process.cwd(), slug);
+      console.log(result.message);
+      process.exitCode = 0;
+    } catch (error) {
+      console.error(error instanceof Error ? error.message : "Archive failed");
+      process.exitCode = 1;
+    }
+  }
 } else {
-  console.error("Usage: aidos <validate|new|init|trace|review>");
+  console.error("Usage: aidos <validate|new|init|trace|review|archive>");
   process.exitCode = 1;
 }
 
@@ -87,7 +103,7 @@ async function handleNewCommand(args: string[]): Promise<void> {
 
   const title = getPositionalTitle(args.slice(1));
   if (!isArtifactType(artifactType) || title === "") {
-    console.error("Usage: aidos new <adr|feature|task|review|flow|dashboard> <title> [options]");
+    console.error("Usage: aidos new <adr|feature|task|review|domain|spike|flow|dashboard> <title> [options]");
     process.exitCode = 1;
     return;
   }
@@ -150,7 +166,14 @@ function isOptionValue(args: string[], value: string): boolean {
 }
 
 function isArtifactType(value: string | undefined): value is ArtifactType {
-  return value === "adr" || value === "feature" || value === "task" || value === "review";
+  return (
+    value === "adr" ||
+    value === "feature" ||
+    value === "task" ||
+    value === "review" ||
+    value === "domain" ||
+    value === "spike"
+  );
 }
 
 async function askOnboardingQuestions(): Promise<OnboardingAnswers> {

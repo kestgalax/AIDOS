@@ -11,7 +11,7 @@ This guide describes how to move from an initial idea to the first traced featur
 npm exec aidos -- init ../my-new-project --interactive
 ```
 
-3. Set `AIDOS_ROOT` or update `aidos.config.json` in the new project.
+3. Run later commands with `aidos` on `PATH` from the new project. Do not point the project at a sibling AIDOS checkout.
 
 ## Phase 1: Idea
 
@@ -73,7 +73,7 @@ Goal: create linked feature, task, and review artifacts.
 Command:
 
 ```bash
-npm exec --prefix ../AIDOS aidos -- new flow "first user workflow"
+aidos new flow "first user workflow"
 ```
 
 Then run:
@@ -87,7 +87,7 @@ npm run aidos:review
 Optional:
 
 ```bash
-npm exec --prefix ../AIDOS aidos -- new dashboard ./dashboard
+aidos new dashboard ./dashboard
 ```
 
 Exit criteria:

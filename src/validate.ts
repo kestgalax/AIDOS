@@ -40,6 +40,7 @@ export async function validateProject(rootDirectory: string): Promise<Validation
   const errors: string[] = [];
 
   await validateRequiredFiles(root, errors);
+  await validateSchemaFiles(root, errors);
   await validateAgentsEntryPoint(root, errors);
   await validateSpecTemplates(root, errors);
   await validateAdrs(root, errors);
@@ -60,6 +61,31 @@ async function validateRequiredFiles(root: string, errors: string[]): Promise<vo
       }
     }),
   );
+}
+
+async function validateSchemaFiles(root: string, errors: string[]): Promise<void> {
+  const contents = await readOptionalFile(path.join(root, "aidos.config.json"));
+  if (contents === null) {
+    return;
+  }
+
+  let schema: unknown;
+  try {
+    schema = JSON.parse(contents).schema;
+  } catch {
+    errors.push("aidos.config.json is not valid JSON");
+    return;
+  }
+
+  if (schema !== 2) {
+    return;
+  }
+
+  for (const relativePath of ["docs/specs/domain-spec-template.md", "docs/specs/spike-template.md"]) {
+    if (!(await fileExists(path.join(root, relativePath)))) {
+      errors.push(`Missing required file: ${relativePath}`);
+    }
+  }
 }
 
 async function validateAgentsEntryPoint(root: string, errors: string[]): Promise<void> {

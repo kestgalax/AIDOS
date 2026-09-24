@@ -24,7 +24,8 @@ Idea -> Product Intent -> Stack ADR Gate -> Dev Environment -> Feature -> Tasks 
 
 ### 4. First Feature
 
-- Create linked artifacts with `aidos new flow "<feature name>"` from the AIDOS tooling root.
+- Create linked artifacts with `aidos new flow "<feature name>"`.
 - Run `npm run aidos:trace` and `npm run aidos:review` before merge.
+- When the feature changes observable behavior, run `aidos archive <feature-slug>` after the review outcome is Approve.
 
 See the lifecycle guide in your AIDOS clone: `docs/onboarding-project-lifecycle.md`.

@@ -1,6 +1,6 @@
 # CI Governance For AIDOS Projects
 
-AIDOS projects should run governance checks in local development and in CI using the cloned AIDOS tooling repository.
+AIDOS projects should run governance checks in local development and in CI with the installed `aidos` command. The product repository does not need to sit next to an AIDOS clone.
 
 ## Minimum Pipeline
 
@@ -12,39 +12,18 @@ npm run aidos:trace
 npm run aidos:review
 ```
 
-These scripts use `scripts/run-aidos.mjs`, which resolves the AIDOS clone through `AIDOS_ROOT` or `aidos.config.json`.
-
-## Workspace Layout
-
-```text
-workspace/
-  AIDOS/
-  my-project/
-```
-
-Set in the project:
-
-```json
-{
-  "toolingRoot": "../AIDOS"
-}
-```
-
-Or export:
-
-```bash
-export AIDOS_ROOT=../AIDOS
-```
+These scripts use `scripts/run-aidos.mjs`. It runs `aidos` from `PATH`. `AIDOS_ROOT` is an optional override for developing AIDOS itself.
 
 ## Generic Shell Example
 
 ```bash
 cd my-project
-export AIDOS_ROOT=../AIDOS
 npm run aidos:validate
 npm run aidos:trace
 npm run aidos:review
 ```
+
+CI may clone AIDOS as a tool and point `AIDOS_ROOT` at that checkout. The product repository stays the working directory.
 
 ## GitHub Actions Reference
 

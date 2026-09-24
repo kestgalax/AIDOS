@@ -3,6 +3,7 @@
 ## Metadata
 
 - Review ID:
+- Schema: 2
 - Outcome:
 
 ## Traceability Check

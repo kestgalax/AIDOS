@@ -19,6 +19,8 @@ Implementation
       ↓
 Review
       ↓
+Archive
+      ↓
 Merge
       ↓
 Release
@@ -35,9 +37,10 @@ Roadmap Update
 5. Implement one task at a time.
 6. Verify behavior and documentation.
 7. Review against governance.
-8. Merge only after review criteria are satisfied.
-9. Update `docs/roadmap.md` and `plan/aidos-turnkey-implementation.md` after every completed implementation task.
-10. Update memory or ADRs when the change affects future work or durable decisions.
+8. Archive an approved behavior delta into the domain spec when the feature changes observable behavior.
+9. Merge only after review criteria are satisfied.
+10. Update `docs/roadmap.md` and `plan/aidos-turnkey-implementation.md` after every completed implementation task.
+11. Update memory or ADRs when the change affects future work or durable decisions.
 
 ## Decision Gates
 

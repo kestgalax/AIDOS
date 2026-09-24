@@ -10,7 +10,7 @@ import {
   type TraceabilityContext,
 } from "./traceability-fields.js";
 
-export type ArtifactType = "adr" | "feature" | "task" | "review";
+export type ArtifactType = "adr" | "feature" | "task" | "review" | "domain" | "spike";
 
 export interface GenerateOptions {
   traceability?: TraceabilityContext;
@@ -49,6 +49,10 @@ export async function generateArtifact(
       return await generateFromTemplate(root, "task", title, slug, options.traceability);
     case "review":
       return await generateFromTemplate(root, "review", `${title} Review`, slug, options.traceability);
+    case "domain":
+      return await generateDomain(root, title, slug);
+    case "spike":
+      return await generateFromTemplate(root, "spike", title, slug, options.traceability);
   }
 }
 
@@ -129,9 +133,19 @@ async function generateAdr(root: string, title: string, slug: string): Promise<G
   return { path: normalizePath(relativePath) };
 }
 
+async function generateDomain(root: string, title: string, slug: string): Promise<GenerateResult> {
+  const templatePath = path.join(root, "docs", "specs", "domain-spec-template.md");
+  const template = await readFile(templatePath, "utf8");
+  const relativePath = path.join("docs", "specs", "domains", slug, "spec.md");
+  await mkdir(path.dirname(path.join(root, relativePath)), { recursive: true });
+  const titled = template.replace("# Domain Spec Template", `# ${title}`);
+  await writeFile(path.join(root, relativePath), titled, "utf8");
+  return { path: normalizePath(relativePath) };
+}
+
 async function generateFromTemplate(
   root: string,
-  type: Exclude<ArtifactType, "adr">,
+  type: "feature" | "task" | "review" | "spike",
   title: string,
   slug: string,
   traceability: TraceabilityContext = {},
@@ -144,7 +158,8 @@ async function generateFromTemplate(
   await mkdir(outputDirectory, { recursive: true });
 
   const titledTemplate = applyTemplateTitle(template, title);
-  const tracedTemplate = fillTraceabilityFields(titledTemplate, type, traceability);
+  const tracedTemplate =
+    type === "spike" ? titledTemplate : fillTraceabilityFields(titledTemplate, type, traceability);
   await writeFile(path.join(root, relativePath), tracedTemplate, "utf8");
 
   return { path: normalizePath(relativePath) };

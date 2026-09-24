@@ -28,7 +28,7 @@ Completed for the first CLI/core increment:
 
 Current focus:
 
-- Continue Milestone 8 Consumer Hardening after the first slice (validate ignore + ADR Impact + living-consumer docs).
+- Continue Milestone 8 with semantic freshness of ADR links. Behavior delta, schema 2 review closure, spike, and self-contained project update are in place.
 - Keep markdown repository artifacts as the source of truth.
 - Keep this roadmap and the turnkey implementation plan current after each task.
 
@@ -36,10 +36,10 @@ Immediate remaining queue (Milestone 8 — Consumer Hardening):
 
 1. ~~`aidos validate` ignore policy for build/vendor trees~~ **Done**
 2. ~~Softer / clearer `ADR Impact` contract in `aidos review`~~ **Done**
-3. Require filled review Outcome + Evidence before a flow is treated as Done.
+3. ~~Require filled review Outcome + Evidence before a flow is treated as Done.~~ **Done** for `Schema: 2` reviews. Older reviews stay advisory.
 4. Semantic link freshness in `trace`/`review` (stale feature↔ADR refs; accepted ADRs unreferenced by current architecture).
 5. Multi-flow discipline after first MVP slice (new engine / UX surface / trust model → new `aidos new flow` or amended feature).
-6. First-class research/spike + quality-gate artifact types (templates + promote-to-ADR path).
+6. ~~First-class research/spike artifact type.~~ **Done.** `aidos new spike` does not authorize implementation. Quality-gate notes remain later.
 7. Stack-aware verification hooks in consumer `ops/` (document optional native build commands without forcing Node as product runtime).
 8. Post-MVP consumer playbook (quality gate → recommended flip → notarization/signing → spike backlog).
 
@@ -175,7 +175,7 @@ Current result:
 - Automated tests cover skeleton validity and overwrite protection.
 - `aidos init ./my-new-project --interactive` asks onboarding questions and uses answers to personalize product intent and the first ADR.
 - Automated tests cover onboarding answer handling.
-- `aidos init ./my-new-project --update --confirm-overwrite` refreshes existing AIDOS-managed skeleton files only with explicit overwrite confirmation.
+- `aidos init ./my-new-project --update --confirm-overwrite` refreshes `.ai/`, spec templates, and the launcher. It leaves product intent, architecture, roadmap, ADRs, and filled specs in place.
 - Automated tests cover update refusal without confirmation and confirmed updates.
 - New-project quickstart documentation is available in English and Russian.
 - `examples/generated-project/` shows a generated project and is covered by validation tests.

@@ -38,6 +38,7 @@ CONTROL
 
 ## Карта репозитория
 
+- `CHANGELOG.md` — что изменилось в AIDOS.
 - `AGENTS.md` — точка входа для AI-агентов.
 - `.ai/constitution.md` — обязательные правила управления проектом.
 - `.ai/planner.md` — роль Planner Agent.
@@ -55,7 +56,7 @@ CONTROL
 - `docs/ci-governance.ru.md` — generic CI guidance для governance checks.
 - `templates/project-starter/` — file-based skeleton для `aidos init`.
 - `docs/decisions/` — Architecture Decision Records.
-- `docs/specs/` — шаблоны feature, task и review.
+- `docs/specs/` — шаблоны feature, task, review, domain и spike.
 - `ops/` — операционные заметки и будущая модель деплоя.
 - `plan/aidos-turnkey-implementation.md` — практический план реализации AIDOS как продукта "под ключ".
 - `examples/generated-project/` — пример проекта, созданный через `aidos init`.
@@ -100,6 +101,8 @@ npm exec aidos new feature "first project setup"
 npm exec aidos new task "validate docs"
 npm exec aidos new review "validate docs"
 npm exec aidos new flow "first user workflow"
+npm exec aidos new domain "authentication"
+npm exec aidos new spike "session expiration"
 ```
 
 `aidos new flow` создаёт связанные feature, task и review с autofill traceability.
@@ -127,7 +130,7 @@ npm exec aidos init ./my-new-project --interactive
 npm exec aidos init ./my-existing-project --update --confirm-overwrite
 ```
 
-Update mode перезаписывает AIDOS-managed skeleton файлы только при наличии `--confirm-overwrite`.
+Update mode после `--confirm-overwrite` обновляет governance-файлы и шаблоны спек. Product intent, архитектуру, roadmap, ADR и заполненные спеки он не переписывает.
 
 Чтобы проверить состояние traceability:
 
@@ -141,6 +144,14 @@ Trace report считает feature, task, review и ADR артефакты и �
 
 ```bash
 npm exec aidos review
+```
+
+Отчёт review проверяет критерии, evidence и ADR impact. Для review со `Schema: 2` ещё нужны Outcome и Evidence.
+
+Слить принятую дельту поведения в доменную спеку:
+
+```bash
+npm exec aidos archive first-user-workflow
 ```
 
 Review report проверяет feature и task артефакты на конкретные acceptance criteria, verification evidence, documentation entries и ADR impact. Результат классифицируется как `Approve`, `Request Changes` или `Block`.
@@ -159,4 +170,4 @@ Dashboard starter — опциональная read-only projection markdown-а�
 
 Документационное и governance-ядро уже создано. `ADR-002` принимает hybrid-модель продукта с CLI-first последовательностью реализации на TypeScript, Node.js и npm.
 
-Текущая исполнимая область включает clone-template bootstrap через `templates/project-starter/`, `aidos init`, lifecycle onboarding docs, traceability autofill и `aidos new flow`, generic CI governance scripts, optional `aidos new dashboard`, `aidos validate`, `aidos trace`, `aidos review`, generators и shared trace/review report model. `ADR-004` откладывает write-back, persistence, hosted deployment, auth и external integrations до будущего ADR.
+Текущая исполнимая область включает clone-template bootstrap через `templates/project-starter/`, `aidos init`, самодостаточный проект на установленном `aidos` (без sibling `toolingRoot`), lifecycle onboarding, traceability autofill и `aidos new flow`, доменные спеки и `aidos archive`, spike, generic CI governance scripts, optional `aidos new dashboard`, `aidos validate`, `aidos trace`, `aidos review`, генераторы и общую модель отчётов. См. `CHANGELOG.md`. `ADR-004` откладывает write-back дашборда, persistence, hosted deployment, auth и external integrations до будущего ADR.

@@ -56,8 +56,8 @@ AIDOS считается реализованным "под ключ", когд�
 
 Текущий фокус:
 
-- продолжить Milestone 8 / Фазу 9 после первого slice (validate ignore + ADR Impact + living-consumer docs);
-- следующий пункт: gate на заполненный review Outcome/Evidence;
+- продолжить Milestone 8 / Фазу 9: semantic freshness ссылок ADR;
+- сделано в этом срезе: `ADR-007`, доменные спеки, `aidos archive`, spike, schema 2 review, самодостаточный проект;
 - сохранить markdown-файлы в репозитории как source of truth;
 - не расширять dashboard/write-back без ADR.
 
@@ -231,7 +231,7 @@ aidos init
 - `npm exec aidos init ./my-new-project` создаёт валидный skeleton;
 - `npm exec aidos init ./my-new-project --interactive` задаёт вопросы и использует ответы для `docs/product-intent.md` и первого ADR;
 - существующие файлы не перезаписываются по умолчанию;
-- `npm exec aidos init ./my-new-project --update --confirm-overwrite` обновляет существующие AIDOS-managed skeleton файлы только при явном подтверждении;
+- `npm exec aidos init ./my-new-project --update --confirm-overwrite` обновляет `.ai/`, шаблоны спек и лаунчер. Product intent, архитектуру, roadmap, ADR и заполненные спеки не перезаписывает;
 - созданный skeleton проходит `aidos validate`.
 
 Следующее улучшение:
@@ -408,10 +408,10 @@ UI добавляется только после CLI/core.
 
 1. **Validate ignore policy** — **Done.** Не сканировать `.derivedData*`, SPM checkouts, `node_modules` и аналогичный vendor markdown.
 2. **ADR Impact UX** — **Done.** Допустимы формулировки `Follows accepted ADR…`; шаблоны синхронизированы.
-3. **Review closure** — пустые Outcome/Evidence в review-спеках = blocker до Done.
+3. **Review closure** — **Done** для `Schema: 2`: пустые Outcome/Evidence блокируют review. Старые review без Schema остаются advisory.
 4. **Semantic freshness** — ловить stale Related ADRs и accepted ADR без связи с текущей architecture.
 5. **Multi-flow hygiene** — правило/док: новый engine, UX surface или trust model → новый `aidos new flow` (или amendment), а не бесконечное расширение F-001.
-6. **Research / spike / quality-gate** — first-class шаблоны по образцу CarrotType research notes и quality notes.
+6. **Research / spike** — **Done.** `aidos new spike` и запрет реализации из spike. Quality-gate notes остаются позже.
 7. **Stack-aware ops** — примеры consumer CI/docs для non-Node runtime без требования Node как runtime продукта.
 8. **Post-MVP playbook** — quality gate → flip recommended → signing/notarization → spike backlog; ссылка из quickstart/lifecycle.
 
@@ -452,7 +452,7 @@ AIDOS готов к использованию другими проектами
 - `aidos validate` работает;
 - `aidos init` создаёт skeleton нового проекта;
 - `aidos init --interactive` персонализирует стартовый skeleton;
-- `aidos init --update --confirm-overwrite` обновляет AIDOS-managed skeleton файлы только при явном подтверждении;
+- `aidos init --update --confirm-overwrite` обновляет governance и шаблоны, не трогая память продукта;
 - `aidos new adr` создаёт ADR;
 - `aidos new feature` создаёт feature spec;
 - `aidos new task` создаёт task;
@@ -480,4 +480,4 @@ AIDOS готов к использованию другими проектами
 4. ~~Фаза 9 / Milestone 8 — первый slice~~ Выполнено: validate ignore, ADR Impact `Follows accepted`, `docs/living-consumers.md`.
 5. **Фаза 9 / Milestone 8 — далее:** review Outcome/Evidence closure, затем semantic freshness и остальная очередь.
 
-Следующий executable шаг: gate на заполненный review Outcome/Evidence в `aidos review`.
+Следующий executable шаг: semantic freshness ссылок ADR в `trace` и `review`.

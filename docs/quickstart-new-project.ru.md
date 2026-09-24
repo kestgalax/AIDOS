@@ -53,11 +53,13 @@ AIDOS спросит mission, vision, principles, non-goals, planned product for
 npm exec aidos -- init ../my-new-project
 ```
 
-Обновление существующего skeleton:
+Обновление уже ведущегося проекта нужно только когда ему нужны новые шаблоны и роли:
 
 ```bash
 npm exec aidos -- init ../my-new-project --update --confirm-overwrite
 ```
+
+Update обновляет `.ai/`, шаблоны спек и `scripts/run-aidos.mjs`. Отсутствующие файлы скелета он дописывает. Product intent, архитектуру, roadmap, ADR, README, `AGENTS.md`, `ops/` и уже заполненные спеки он не перезаписывает.
 
 ## 3. Пройти lifecycle проекта
 
@@ -88,7 +90,7 @@ AIDOS validation passed
 Из директории нового проекта:
 
 ```bash
-npm exec --prefix ../AIDOS aidos -- new flow "first user workflow"
+aidos new flow "first user workflow"
 ```
 
 Команда создаёт связанные feature, task и review с autofill traceability.
@@ -108,7 +110,7 @@ npm run aidos:review
 ## 6. Опциональный dashboard scaffold
 
 ```bash
-npm exec --prefix ../AIDOS aidos -- new dashboard ./dashboard
+aidos new dashboard ./dashboard
 ```
 
 Dashboard starter находится в `examples/dashboard-starter/` внутри клона AIDOS.

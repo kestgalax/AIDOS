@@ -7,6 +7,7 @@ AIDOS is a knowledge-first operating system for AI-assisted development. Its arc
 ```text
 WHY         Product Intent
 WHAT        Roadmap and Features
+BEHAVIOR    Domain specs
 HOW         Architecture
 DECISIONS   ADRs
 EXECUTION   Agent Roles, Specs, Tasks
@@ -22,6 +23,12 @@ Source: `docs/product-intent.md`
 Defines the reason the project exists, the mission, the desired future state, non-goals, principles, trade-offs, and success criteria.
 
 This layer constrains all lower layers.
+
+### Behavior Layer
+
+Source: `docs/specs/domains/` and `docs/decisions/ADR-007-behavior-specs-and-archive.md`
+
+Domain specs describe observable behavior now. A feature carries a behavior delta. `aidos archive` merges an approved delta into the domain spec. Spikes record research and do not authorize implementation.
 
 ### Architecture Layer
 
@@ -99,7 +106,8 @@ The expected product capabilities are:
 
 - validate repository structure;
 - validate ADRs and specs;
-- generate new ADR/spec/task/review artifacts;
+- generate ADR, feature, task, review, domain, and spike artifacts;
+- archive an approved behavior delta into a domain spec;
 - maintain traceability links;
 - produce governance reports;
 - optionally expose a UI for navigation and visualization.
@@ -109,6 +117,8 @@ The expected product capabilities are:
 `ADR-005-optional-dashboard-scaffold.md` places the reference dashboard in `examples/dashboard-starter/` as an optional consumer scaffold.
 
 `ADR-006-generic-ci-governance-scripts.md` allows generic CI governance scripts in the project starter.
+
+`ADR-007-behavior-specs-and-archive.md` adds domain specs, behavior deltas, archive, spikes, and a self-contained project. New projects do not store a path to an AIDOS clone. `ADR-007` amends the sibling tooling path from `ADR-006`.
 
 `ADR-004-defer-write-back-persistence-and-deployment.md` defers write-back, persistence, hosted deployment, authentication, and external integrations until a future ADR is accepted for a concrete trigger.
 
@@ -120,6 +130,8 @@ AIDOS bootstraps consumer projects through:
 - `templates/project-starter/` copied by `aidos init`;
 - lifecycle gates in `docs/onboarding-project-lifecycle.md`;
 - linked artifact generation through `aidos new flow`;
+- domain specs and `aidos archive` for accepted behavior;
+- an installed `aidos` command, not a sibling checkout path;
 - optional dashboard scaffold through `aidos new dashboard`.
 
 In-repo scaffolds under `examples/` are not the same as a living product. External living consumers (first: CarrotType) are documented in `docs/living-consumers.md` and prove AIDOS on real stacks outside this repository.

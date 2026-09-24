@@ -6,6 +6,7 @@ import { getPackageRoot } from "./package-root.js";
 export interface InitResult {
   createdFiles: string[];
   updatedFiles: string[];
+  skippedFiles: string[];
 }
 
 export interface InitOptions {
@@ -35,6 +36,7 @@ export async function initProject(
   const root = path.resolve(targetDirectory);
   const createdFiles: string[] = [];
   const updatedFiles: string[] = [];
+  const skippedFiles: string[] = [];
   const templateDirectory = getProjectStarterTemplateDirectory();
   const replacements = buildReplacements(options.answers);
 
@@ -45,13 +47,29 @@ export async function initProject(
   await walkTemplate(templateDirectory, root, "", async (relativePath, contents) => {
     const absolutePath = path.join(root, relativePath);
     const exists = await fileExists(absolutePath);
+    const fileClass = classifyStarterFile(relativePath);
 
-    if (!options.force && !options.update && exists) {
+    if (!options.update && !options.force && exists) {
       throw new Error(`Refusing to overwrite existing file: ${relativePath}`);
     }
 
+    if (options.update && exists && fileClass === "keep") {
+      skippedFiles.push(relativePath);
+      return;
+    }
+
+    if (options.update && exists && fileClass === "create") {
+      skippedFiles.push(relativePath);
+      return;
+    }
+
     await mkdir(path.dirname(absolutePath), { recursive: true });
-    await writeFile(absolutePath, applyReplacements(contents, replacements, relativePath), "utf8");
+
+    if (fileClass === "config" && exists) {
+      await writeFile(absolutePath, await mergeProjectConfig(absolutePath), "utf8");
+    } else {
+      await writeFile(absolutePath, applyReplacements(contents, replacements, relativePath), "utf8");
+    }
 
     if (exists) {
       updatedFiles.push(relativePath);
@@ -60,7 +78,52 @@ export async function initProject(
     }
   });
 
-  return { createdFiles, updatedFiles };
+  return {
+    createdFiles: createdFiles.sort(),
+    updatedFiles: updatedFiles.sort(),
+    skippedFiles: skippedFiles.sort(),
+  };
+}
+
+function classifyStarterFile(relativePath: string): "refresh" | "keep" | "config" | "create" {
+  if (relativePath === "aidos.config.json") {
+    return "config";
+  }
+  if (
+    relativePath.startsWith(".ai/") ||
+    relativePath === "scripts/run-aidos.mjs" ||
+    /^docs\/specs\/[^/]+-template\.md$/.test(relativePath)
+  ) {
+    return "refresh";
+  }
+
+  const kept = [
+    "docs/product-intent.md",
+    "docs/architecture.md",
+    "docs/roadmap.md",
+    "README.md",
+    "AGENTS.md",
+  ];
+  if (
+    kept.includes(relativePath) ||
+    relativePath.startsWith("docs/decisions/") ||
+    relativePath.startsWith("docs/specs/features/") ||
+    relativePath.startsWith("docs/specs/tasks/") ||
+    relativePath.startsWith("docs/specs/reviews/") ||
+    relativePath.startsWith("docs/specs/domains/") ||
+    relativePath.startsWith("docs/specs/spikes/") ||
+    relativePath.startsWith("ops/")
+  ) {
+    return "keep";
+  }
+
+  return "create";
+}
+
+async function mergeProjectConfig(absolutePath: string): Promise<string> {
+  const parsed: unknown = JSON.parse(await readFile(absolutePath, "utf8"));
+  const config = typeof parsed === "object" && parsed !== null ? { ...parsed } : {};
+  return `${JSON.stringify({ ...config, schema: 2 }, null, 2)}\n`;
 }
 
 async function walkTemplate(

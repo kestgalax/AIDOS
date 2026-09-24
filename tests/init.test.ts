@@ -14,7 +14,7 @@ test("initializes a valid AIDOS skeleton in the target directory", async () => {
     const result = await initProject(fixture);
     const validation = await validateProject(fixture);
 
-    assert.equal(result.createdFiles.length, 24);
+    assert.equal(result.createdFiles.length, 26);
     assert.equal(validation.ok, true);
     assert.deepEqual(validation.errors, []);
     assert.match(
@@ -72,6 +72,9 @@ test("update mode overwrites skeleton files when explicitly confirmed", async ()
     await initProject(fixture);
     await writeFile(readmePath, "# Customized Existing Project\n", "utf8");
 
+    await writeFile(path.join(fixture, "docs", "product-intent.md"), "# Mission stays\n", "utf8");
+    await writeFile(path.join(fixture, ".ai", "workflow.md"), "# Old workflow\n", "utf8");
+
     const result = await initProject(fixture, {
       update: true,
       confirmOverwrite: true,
@@ -81,12 +84,12 @@ test("update mode overwrites skeleton files when explicitly confirmed", async ()
     });
 
     assert.equal(result.createdFiles.length, 0);
-    assert.equal(result.updatedFiles.length, 24);
-    assert.match(await readFile(readmePath, "utf8"), /# New AIDOS Project/);
-    assert.match(
-      await readFile(path.join(fixture, "docs", "product-intent.md"), "utf8"),
-      /Updated mission/,
-    );
+    assert.ok(result.updatedFiles.includes(".ai/workflow.md"));
+    assert.ok(result.skippedFiles.includes("docs/product-intent.md"));
+    assert.ok(result.skippedFiles.includes("README.md"));
+    assert.equal(await readFile(readmePath, "utf8"), "# Customized Existing Project\n");
+    assert.equal(await readFile(path.join(fixture, "docs", "product-intent.md"), "utf8"), "# Mission stays\n");
+    assert.doesNotMatch(await readFile(path.join(fixture, ".ai", "workflow.md"), "utf8"), /# Old workflow/);
   } finally {
     await rm(fixture, { recursive: true, force: true });
   }

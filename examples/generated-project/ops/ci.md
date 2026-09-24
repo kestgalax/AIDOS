@@ -1,10 +1,10 @@
 # CI Governance
 
-This project uses AIDOS governance checks through the cloned AIDOS tooling repository.
+This project runs AIDOS governance with the installed `aidos` command. The project files are the source of truth.
 
 ## Prerequisites
 
-- `AIDOS_ROOT` points to the cloned AIDOS repository, or `aidos.config.json` sets `toolingRoot`.
+- `aidos` is on `PATH`, or `AIDOS_ROOT` points at an AIDOS checkout used only as a tool.
 - Node.js is available in the CI environment.
 
 ## Minimum Pipeline
