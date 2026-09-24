@@ -5,6 +5,7 @@ Use this template when Reviewer Agent evaluates a change.
 ## Metadata
 
 - Review ID:
+- Schema: 2
 - Change:
 - Reviewer:
 - Date:

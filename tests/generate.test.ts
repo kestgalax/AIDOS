@@ -82,6 +82,33 @@ test("generates a review checklist from the review template", async () => {
   }
 });
 
+test("generates a domain spec and a spike", async () => {
+  const fixture = await createGenerationFixture();
+
+  try {
+    await writeFile(
+      path.join(fixture, "docs", "specs", "domain-spec-template.md"),
+      "# Domain Spec Template\n\n## Purpose\n\n## Requirements\n",
+      "utf8",
+    );
+    await writeFile(
+      path.join(fixture, "docs", "specs", "spike-template.md"),
+      "# Spike Template\n\n## Implementation Boundary\n\nImplementation has not started.\n",
+      "utf8",
+    );
+
+    const domain = await generateArtifact(fixture, "domain", "authentication");
+    const spike = await generateArtifact(fixture, "spike", "session expiration");
+
+    assert.equal(domain.path, "docs/specs/domains/authentication/spec.md");
+    assert.match(await readFile(path.join(fixture, domain.path), "utf8"), /^# Authentication/m);
+    assert.equal(spike.path, "docs/specs/spikes/session-expiration.md");
+    assert.match(await readFile(path.join(fixture, spike.path), "utf8"), /Implementation has not started/);
+  } finally {
+    await rm(fixture, { recursive: true, force: true });
+  }
+});
+
 async function createGenerationFixture(): Promise<string> {
   const root = await mkdtemp(path.join(tmpdir(), "aidos-generate-"));
   await mkdir(path.join(root, "docs", "decisions"), { recursive: true });

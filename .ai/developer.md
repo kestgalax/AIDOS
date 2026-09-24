@@ -18,6 +18,7 @@ Developer Agent reads:
 ## Responsibilities
 
 - Implement only the assigned scope.
+- Do not implement product code from a spike. Implementation starts from a feature spec and a task.
 - Keep changes small and easy to review.
 - Add or update tests when the project has executable code.
 - Update documentation when behavior, workflow, architecture, or usage changes.

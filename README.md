@@ -38,6 +38,7 @@ Each layer narrows the next one:
 
 ## Repository Map
 
+- `CHANGELOG.md` — what changed in AIDOS.
 - `AGENTS.md` — entry point for AI agents.
 - `.ai/constitution.md` — mandatory project governance.
 - `.ai/planner.md` — Planner Agent role.
@@ -55,7 +56,7 @@ Each layer narrows the next one:
 - `docs/ci-governance.md` — generic CI guidance for governance checks.
 - `templates/project-starter/` — file-based skeleton used by `aidos init`.
 - `docs/decisions/` — Architecture Decision Records.
-- `docs/specs/` — feature, task, and review templates.
+- `docs/specs/` — feature, task, review, domain, and spike templates.
 - `ops/` — operational notes and future deployment model.
 - `plan/aidos-turnkey-implementation.md` — practical plan for implementing AIDOS as a turnkey product.
 - `examples/generated-project/` — example project produced by `aidos init`.
@@ -100,6 +101,8 @@ npm exec aidos new feature "first project setup"
 npm exec aidos new task "validate docs"
 npm exec aidos new review "validate docs"
 npm exec aidos new flow "first user workflow"
+npm exec aidos new domain "authentication"
+npm exec aidos new spike "session expiration"
 ```
 
 `aidos new flow` creates linked feature, task, and review artifacts with traceability autofill.
@@ -127,7 +130,7 @@ To refresh an existing AIDOS skeleton, use update mode with explicit overwrite c
 npm exec aidos init ./my-existing-project --update --confirm-overwrite
 ```
 
-Update mode overwrites AIDOS-managed skeleton files only after `--confirm-overwrite` is present.
+Update mode refreshes governance files and spec templates after `--confirm-overwrite`. It does not rewrite product intent, architecture, roadmap, ADRs, or filled specs.
 
 To inspect traceability health:
 
@@ -143,7 +146,13 @@ To run the first deterministic reviewer gate:
 npm exec aidos review
 ```
 
-The review report checks feature and task artifacts for concrete acceptance criteria, verification evidence, documentation entries, and ADR impact. It classifies the result as `Approve`, `Request Changes`, or `Block`.
+The review report checks feature and task artifacts for concrete acceptance criteria, verification evidence, documentation entries, and ADR impact. Schema 2 reviews must also have Outcome and Evidence. It classifies the result as `Approve`, `Request Changes`, or `Block`.
+
+To merge an approved behavior delta into a domain spec:
+
+```bash
+npm exec aidos archive first-user-workflow
+```
 
 To build or run the optional dashboard starter:
 
@@ -159,4 +168,4 @@ The dashboard starter is an optional read-only projection of markdown repository
 
 This repository has completed the documentation and governance bootstrap. `ADR-002` accepts a hybrid product model with a CLI-first implementation sequence using TypeScript on Node.js and npm.
 
-The current executable scope includes clone-template project bootstrap through `templates/project-starter/`, `aidos init`, lifecycle onboarding docs, traceability autofill and `aidos new flow`, generic CI governance scripts, optional `aidos new dashboard`, `aidos validate`, `aidos trace`, `aidos review`, artifact generators, and a shared trace/review report model. `ADR-004` defers write-back, persistence, hosted deployment, auth, and external integrations until a future ADR.
+The current executable scope includes clone-template project bootstrap through `templates/project-starter/`, `aidos init`, a self-contained project that runs installed `aidos` (no sibling `toolingRoot`), lifecycle onboarding docs, traceability autofill and `aidos new flow`, domain specs and `aidos archive`, spikes, generic CI governance scripts, optional `aidos new dashboard`, `aidos validate`, `aidos trace`, `aidos review`, artifact generators, and a shared trace/review report model. See `CHANGELOG.md`. `ADR-004` defers dashboard write-back, persistence, hosted deployment, auth, and external integrations until a future ADR.

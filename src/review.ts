@@ -41,12 +41,17 @@ export async function reviewProject(rootDirectory: string): Promise<ReviewReport
     advisory: [],
   };
 
+  const reviewFiles = await listMarkdownFiles(path.join(root, "docs", "specs", "reviews"));
+
   await Promise.all([
     ...taskFiles.map(async (filePath) => {
       await reviewTaskFile(root, filePath, findings);
     }),
     ...featureFiles.map(async (filePath) => {
       await reviewFeatureFile(root, filePath, findings);
+    }),
+    ...reviewFiles.map(async (filePath) => {
+      await reviewReviewFile(root, filePath, findings);
     }),
   ]);
 
@@ -127,6 +132,99 @@ async function reviewFeatureFile(root: string, filePath: string, findings: Revie
       message: "Documentation Impact has no concrete entries",
     });
   }
+
+  const behaviorDelta = readSection(contents, "Behavior Delta");
+  if (behaviorDelta === null) {
+    findings.advisory.push({
+      file,
+      message: "Behavior Delta is absent",
+    });
+  } else if (!hasConcreteBehaviorDelta(behaviorDelta)) {
+    findings.blocking.push({
+      file,
+      message: "Behavior Delta has no concrete requirement or No behavior change",
+    });
+  }
+}
+
+async function reviewReviewFile(root: string, filePath: string, findings: ReviewFindings): Promise<void> {
+  const contents = await readFile(filePath, "utf8");
+  const file = normalizePath(path.relative(root, filePath));
+  const schema = readMetadataValue(contents, "Schema");
+  const outcome = readMetadataValue(contents, "Outcome");
+
+  if (schema !== "2") {
+    if (!isClosedReviewOutcome(outcome)) {
+      findings.advisory.push({
+        file,
+        message: "Legacy review is not gated on Schema 2 Outcome and Evidence",
+      });
+    }
+    return;
+  }
+
+  if (!isClosedReviewOutcome(outcome)) {
+    findings.blocking.push({
+      file,
+      message: "Outcome is missing or is not Approve, Request Changes, or Block",
+    });
+  }
+
+  if (!hasConcreteEvidence(contents)) {
+    findings.blocking.push({
+      file,
+      message: "Evidence is missing or still a placeholder",
+    });
+  }
+}
+
+export function archiveReviewError(contents: string): string | null {
+  if (readMetadataValue(contents, "Schema") !== "2") {
+    return "Review must declare Schema: 2 before archive";
+  }
+  if (readMetadataValue(contents, "Outcome") !== "Approve") {
+    return "Review Outcome must be Approve before archive";
+  }
+  if (!hasConcreteEvidence(contents)) {
+    return "Review evidence is missing or still a placeholder";
+  }
+  return null;
+}
+
+function readMetadataValue(contents: string, field: string): string | null {
+  const match = contents.match(new RegExp(`^- ${field}:\\s*(.*)$`, "m"));
+  if (!match) {
+    return null;
+  }
+  const value = match[1]?.trim() ?? "";
+  return value.length === 0 ? null : value;
+}
+
+function isClosedReviewOutcome(value: string | null): boolean {
+  return value === "Approve" || value === "Request Changes" || value === "Block";
+}
+
+function hasConcreteEvidence(contents: string): boolean {
+  return contents.split("\n").some((line) => {
+    const trimmed = line.trim().replace(/^[-*]\s*/, "");
+    if (!/^evidence:?/i.test(trimmed)) {
+      return false;
+    }
+    const value = trimmed.replace(/^evidence:?\s*/i, "").trim();
+    return value.length > 0 && !placeholderEntries.has(value) && value !== "Evidence";
+  });
+}
+
+function hasConcreteBehaviorDelta(section: string): boolean {
+  if (/No behavior change/i.test(section)) {
+    return true;
+  }
+
+  return section.split("\n").some((line) => {
+    const match = /^#### Requirement:\s*(.+)$/.exec(line.trim());
+    const name = match?.[1]?.trim() ?? "";
+    return name.length > 0 && name !== "Requirement name";
+  });
 }
 
 function classifyOutcome(findings: ReviewFindings): ReviewOutcome {

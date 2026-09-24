@@ -11,7 +11,7 @@
 npm exec aidos -- init ../my-new-project --interactive
 ```
 
-3. Укажите `AIDOS_ROOT` или обновите `aidos.config.json` в новом проекте.
+3. Дальше запускайте `aidos` из `PATH` в каталоге нового проекта. Не указывайте проект на соседний клон AIDOS.
 
 ## Фаза 1: Идея
 
@@ -73,7 +73,7 @@ npm exec aidos -- init ../my-new-project --interactive
 Команда:
 
 ```bash
-npm exec --prefix ../AIDOS aidos -- new flow "first user workflow"
+aidos new flow "first user workflow"
 ```
 
 Затем:
@@ -87,7 +87,7 @@ npm run aidos:review
 Опционально:
 
 ```bash
-npm exec --prefix ../AIDOS aidos -- new dashboard ./dashboard
+aidos new dashboard ./dashboard
 ```
 
 Критерий готовности:
